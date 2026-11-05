@@ -1,0 +1,209 @@
+{
+  "comment": "统一资源清单：ID -> Resources 相对路径。新增资源在此登记，代码只引用 ID。",
+  "models": [
+    {
+      "id": "castle.flag",
+      "path": "Models/Castle/flag"
+    },
+    {
+      "id": "castle.gate",
+      "path": "Models/Castle/gate"
+    },
+    {
+      "id": "castle.stairs_stone",
+      "path": "Models/Castle/stairs-stone"
+    },
+    {
+      "id": "castle.tower_hexagon_base",
+      "path": "Models/Castle/tower-hexagon-base"
+    },
+    {
+      "id": "castle.tower_hexagon_mid",
+      "path": "Models/Castle/tower-hexagon-mid"
+    },
+    {
+      "id": "castle.tower_hexagon_roof",
+      "path": "Models/Castle/tower-hexagon-roof"
+    },
+    {
+      "id": "castle.tower_square_base",
+      "path": "Models/Castle/tower-square-base"
+    },
+    {
+      "id": "castle.tower_square_mid",
+      "path": "Models/Castle/tower-square-mid"
+    },
+    {
+      "id": "castle.tower_square_roof",
+      "path": "Models/Castle/tower-square-roof"
+    },
+    {
+      "id": "castle.wall_corner",
+      "path": "Models/Castle/wall-corner"
+    },
+    {
+      "id": "nature.grass",
+      "path": "Models/Nature/grass"
+    },
+    {
+      "id": "nature.grass_large",
+      "path": "Models/Nature/grass_large"
+    },
+    {
+      "id": "nature.log",
+      "path": "Models/Nature/log"
+    },
+    {
+      "id": "nature.log_large",
+      "path": "Models/Nature/log_large"
+    },
+    {
+      "id": "nature.mushroom_red",
+      "path": "Models/Nature/mushroom_red"
+    },
+    {
+      "id": "nature.mushroom_red_group",
+      "path": "Models/Nature/mushroom_redGroup"
+    },
+    {
+      "id": "nature.mushroom_tan",
+      "path": "Models/Nature/mushroom_tan"
+    },
+    {
+      "id": "nature.plant_bush",
+      "path": "Models/Nature/plant_bush"
+    },
+    {
+      "id": "nature.plant_bush_large",
+      "path": "Models/Nature/plant_bushLarge"
+    },
+    {
+      "id": "nature.rock_large_a",
+      "path": "Models/Nature/rock_largeA"
+    },
+    {
+      "id": "nature.rock_large_b",
+      "path": "Models/Nature/rock_largeB"
+    },
+    {
+      "id": "nature.rock_small_a",
+      "path": "Models/Nature/rock_smallA"
+    },
+    {
+      "id": "nature.rock_small_b",
+      "path": "Models/Nature/rock_smallB"
+    },
+    {
+      "id": "nature.tree_blocks",
+      "path": "Models/Nature/tree_blocks"
+    },
+    {
+      "id": "nature.tree_blocks_fall",
+      "path": "Models/Nature/tree_blocks_fall"
+    },
+    {
+      "id": "nature.tree_cone",
+      "path": "Models/Nature/tree_cone"
+    },
+    {
+      "id": "nature.tree_default",
+      "path": "Models/Nature/tree_default"
+    },
+    {
+      "id": "nature.tree_detailed",
+      "path": "Models/Nature/tree_detailed"
+    },
+    {
+      "id": "town.building_a",
+      "path": "Models/Town/building-type-a"
+    },
+    {
+      "id": "town.building_b",
+      "path": "Models/Town/building-type-b"
+    },
+    {
+      "id": "town.building_c",
+      "path": "Models/Town/building-type-c"
+    },
+    {
+      "id": "town.building_g",
+      "path": "Models/Town/building-type-g"
+    },
+    {
+      "id": "town.tree_large",
+      "path": "Models/Town/tree-large"
+    },
+    {
+      "id": "town.tree_small",
+      "path": "Models/Town/tree-small"
+    }
+  ],
+  "audio": [
+    {
+      "id": "ui.back",
+      "path": "Audio/back_001"
+    },
+    {
+      "id": "ui.click",
+      "path": "Audio/click_001"
+    },
+    {
+      "id": "ui.click_alt",
+      "path": "Audio/click_002"
+    },
+    {
+      "id": "ui.click_alt2",
+      "path": "Audio/click_003"
+    },
+    {
+      "id": "ui.close",
+      "path": "Audio/close_001"
+    },
+    {
+      "id": "ui.confirm",
+      "path": "Audio/confirmation_001"
+    },
+    {
+      "id": "ui.confirm_alt",
+      "path": "Audio/confirmation_002"
+    },
+    {
+      "id": "ui.drop",
+      "path": "Audio/drop_001"
+    },
+    {
+      "id": "ui.error",
+      "path": "Audio/error_001"
+    },
+    {
+      "id": "ui.open",
+      "path": "Audio/open_001"
+    },
+    {
+      "id": "ui.fox_chirp",
+      "path": "Audio/pluck_001"
+    },
+    {
+      "id": "ui.question",
+      "path": "Audio/question_001"
+    },
+    {
+      "id": "ui.select",
+      "path": "Audio/select_001"
+    },
+    {
+      "id": "ui.select_alt",
+      "path": "Audio/select_002"
+    }
+  ],
+  "textures": [
+    {
+      "id": "colormap.castle",
+      "path": "Textures/colormap_castle"
+    },
+    {
+      "id": "colormap.town",
+      "path": "Textures/colormap_town"
+    }
+  ]
+}

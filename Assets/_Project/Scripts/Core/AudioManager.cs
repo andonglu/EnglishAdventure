@@ -18,17 +18,16 @@ namespace EA
             _cfg = cfg;
             _source = gameObject.AddComponent<AudioSource>();
             _source.playOnAwake = false;
-            Preload(new[] { "click_001", "click_002", "select_001", "confirmation_001",
-                            "back_001", "error_001", "pluck_001", "question_001" });
+            Preload(new[] { "ui.click", "ui.click_alt", "ui.select", "ui.confirm",
+                            "ui.back", "ui.error", "ui.fox_chirp", "ui.question" });
         }
 
-        void Preload(string[] names)
+        void Preload(string[] ids)
         {
-            foreach (var n in names)
+            foreach (var id in ids)
             {
-                var c = Resources.Load<AudioClip>("Audio/" + n);
-                if (c != null) _clips[n] = c;
-                else Debug.LogWarning("[EA] 音效缺失: " + n);
+                var c = ResourceService.Load<AudioClip>(id);
+                if (c != null) _clips[id] = c;
             }
         }
 
@@ -45,12 +44,12 @@ namespace EA
         }
 
         // 常用语义音效
-        public void Click() => Play("click_001");
-        public void Select() => Play("select_001");
-        public void Confirm() => Play("confirmation_001");
-        public void Back() => Play("back_001");
-        public void Error() => Play("error_001");
-        public void Question() => Play("question_001");
-        public void FoxChirp() => Play("pluck_001");
+        public void Click() => Play("ui.click");
+        public void Select() => Play("ui.select");
+        public void Confirm() => Play("ui.confirm");
+        public void Back() => Play("ui.back");
+        public void Error() => Play("ui.error");
+        public void Question() => Play("ui.question");
+        public void FoxChirp() => Play("ui.fox_chirp");
     }
 }

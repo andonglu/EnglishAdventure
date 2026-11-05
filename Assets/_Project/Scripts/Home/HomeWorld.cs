@@ -25,7 +25,7 @@ namespace EA
             ground.transform.SetParent(transform, false);
             ground.transform.localScale = new Vector3(42f, 0.5f, 42f);
             var gm = ground.GetComponent<Renderer>();
-            gm.sharedMaterial = Solid(new Color(0.52f, 0.80f, 0.45f)); // 草地绿
+            gm.sharedMaterial = MaterialLibrary.Solid(new Color(0.52f, 0.80f, 0.45f)); // 草地绿
 
             // ---- 中央广场（浅土色圆盘 + 圆环小路）----
             var plaza = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
@@ -33,7 +33,7 @@ namespace EA
             plaza.transform.SetParent(transform, false);
             plaza.transform.localPosition = new Vector3(0, 0.26f, 0);
             plaza.transform.localScale = new Vector3(7.5f, 0.5f, 7.5f);
-            plaza.GetComponent<Renderer>().sharedMaterial = Solid(new Color(0.88f, 0.80f, 0.60f));
+            plaza.GetComponent<Renderer>().sharedMaterial = MaterialLibrary.Solid(new Color(0.88f, 0.80f, 0.60f));
             Object.Destroy(plaza.GetComponent<CapsuleCollider>());
 
             // ---- 四大区域 ----
@@ -57,19 +57,19 @@ namespace EA
             var p = Pos(AreaId.Vocabulary);
             var root = Group("Area_Vocabulary", p);
             // 森林：一圈树 + 原木拱门入口
-            string[] trees = { "tree_default", "tree_blocks", "tree_detailed", "tree_cone", "tree_blocks_fall" };
+            string[] trees = { "nature.tree_default", "nature.tree_blocks", "nature.tree_detailed", "nature.tree_cone", "nature.tree_blocks_fall" };
             for (int i = 0; i < 10; i++)
             {
                 float ang = i * 36f * Mathf.Deg2Rad;
                 float r = 3.6f + (i % 3) * 0.5f;
                 var tp = p + new Vector3(Mathf.Cos(ang) * r, 0, Mathf.Sin(ang) * r);
-                ModelFactory.Spawn("Models/Nature/" + trees[i % trees.Length], 2.6f + (i % 3) * 0.5f, tp, i * 47f)
+                ModelFactory.Spawn(trees[i % trees.Length], 2.6f + (i % 3) * 0.5f, tp, i * 47f)
                     ?.transform.SetParent(root, true);
             }
             // 拱门：两根原木 + 横梁 + 蘑菇点缀
-            var l1 = ModelFactory.Spawn("Models/Nature/log", 1.4f, p + new Vector3(-1.2f, 0, 3.4f));
-            var l2 = ModelFactory.Spawn("Models/Nature/log", 1.4f, p + new Vector3(1.2f, 0, 3.4f));
-            var beam = ModelFactory.Spawn("Models/Nature/log_large", 1.0f, p + new Vector3(0, 2.2f, 3.4f));
+            var l1 = ModelFactory.Spawn("nature.log", 1.4f, p + new Vector3(-1.2f, 0, 3.4f));
+            var l2 = ModelFactory.Spawn("nature.log", 1.4f, p + new Vector3(1.2f, 0, 3.4f));
+            var beam = ModelFactory.Spawn("nature.log_large", 1.0f, p + new Vector3(0, 2.2f, 3.4f));
             if (beam != null) beam.transform.rotation = Quaternion.Euler(0, 0, 90f);
             foreach (var o in new[] { l1, l2, beam }) o?.transform.SetParent(root, true);
             AddSign(root, p + new Vector3(0, 0.05f, 4.6f), AreaId.Vocabulary, 1f);
@@ -81,18 +81,18 @@ namespace EA
             var p = Pos(AreaId.Phonics);
             var root = Group("Area_Phonics", p);
             // 学院：城堡塔楼（基座+双中段+尖顶）
-            var t1 = ModelFactory.Spawn("Models/Castle/tower-square-base", 1.0f, p);
-            var t2 = ModelFactory.Spawn("Models/Castle/tower-square-mid", 1.0f, p + new Vector3(0, 1.0f, 0));
-            var t3 = ModelFactory.Spawn("Models/Castle/tower-square-mid", 1.0f, p + new Vector3(0, 2.0f, 0));
-            var t4 = ModelFactory.Spawn("Models/Castle/tower-square-roof", 2.0f, p + new Vector3(0, 3.0f, 0));
+            var t1 = ModelFactory.Spawn("castle.tower_square_base", 1.0f, p);
+            var t2 = ModelFactory.Spawn("castle.tower_square_mid", 1.0f, p + new Vector3(0, 1.0f, 0));
+            var t3 = ModelFactory.Spawn("castle.tower_square_mid", 1.0f, p + new Vector3(0, 2.0f, 0));
+            var t4 = ModelFactory.Spawn("castle.tower_square_roof", 2.0f, p + new Vector3(0, 3.0f, 0));
             foreach (var o in new[] { t1, t2, t3, t4 }) o?.transform.SetParent(root, true);
             // 旗帜
-            var flag = ModelFactory.Spawn("Models/Castle/flag", 1.2f, p + new Vector3(0, 5.1f, 0));
+            var flag = ModelFactory.Spawn("castle.flag", 1.2f, p + new Vector3(0, 5.1f, 0));
             flag?.transform.SetParent(root, true);
             // 台阶 + 树
-            var st = ModelFactory.Spawn("Models/Castle/stairs-stone", 0.6f, p + new Vector3(0, 0, 1.1f));
+            var st = ModelFactory.Spawn("castle.stairs_stone", 0.6f, p + new Vector3(0, 0, 1.1f));
             st?.transform.SetParent(root, true);
-            var tr = ModelFactory.Spawn("Models/Town/tree-large", 2.2f, p + new Vector3(-2.4f, 0, 1.6f));
+            var tr = ModelFactory.Spawn("town.tree_large", 2.2f, p + new Vector3(-2.4f, 0, 1.6f));
             tr?.transform.SetParent(root, true);
             AddSign(root, p + new Vector3(0, 0.05f, 2.6f), AreaId.Phonics, 1f);
             AreaEntrance.Attach(_gm, root.gameObject, AreaId.Phonics);
@@ -102,12 +102,12 @@ namespace EA
         {
             var p = Pos(AreaId.Speaking);
             var root = Group("Area_Speaking", p);
-            var h1 = ModelFactory.Spawn("Models/Town/building-type-a", 2.6f, p + new Vector3(-1.8f, 0, -1.2f), 15f);
-            var h2 = ModelFactory.Spawn("Models/Town/building-type-b", 2.4f, p + new Vector3(1.9f, 0, -1.5f), -20f);
-            var h3 = ModelFactory.Spawn("Models/Town/building-type-c", 2.2f, p + new Vector3(0.2f, 0, 1.6f), 180f);
+            var h1 = ModelFactory.Spawn("town.building_a", 2.6f, p + new Vector3(-1.8f, 0, -1.2f), 15f);
+            var h2 = ModelFactory.Spawn("town.building_b", 2.4f, p + new Vector3(1.9f, 0, -1.5f), -20f);
+            var h3 = ModelFactory.Spawn("town.building_c", 2.2f, p + new Vector3(0.2f, 0, 1.6f), 180f);
             foreach (var o in new[] { h1, h2, h3 }) o?.transform.SetParent(root, true);
-            var t1 = ModelFactory.Spawn("Models/Town/tree-small", 1.4f, p + new Vector3(-3.4f, 0, 1.4f));
-            var t2 = ModelFactory.Spawn("Models/Town/tree-small", 1.4f, p + new Vector3(3.4f, 0, 0.8f));
+            var t1 = ModelFactory.Spawn("town.tree_small", 1.4f, p + new Vector3(-3.4f, 0, 1.4f));
+            var t2 = ModelFactory.Spawn("town.tree_small", 1.4f, p + new Vector3(3.4f, 0, 0.8f));
             foreach (var o in new[] { t1, t2 }) o?.transform.SetParent(root, true);
             AddSign(root, p + new Vector3(0, 0.05f, 3.4f), AreaId.Speaking, 1f);
             AreaEntrance.Attach(_gm, root.gameObject, AreaId.Speaking);
@@ -118,17 +118,17 @@ namespace EA
             var p = Pos(AreaId.Challenge);
             var root = Group("Area_Challenge", p);
             // 竞技场：门楼 + 两侧塔 + 旗帜 + 石阶广场
-            var gate = ModelFactory.Spawn("Models/Castle/gate", 3.0f, p);
+            var gate = ModelFactory.Spawn("castle.gate", 3.0f, p);
             gate?.transform.SetParent(root, true);
-            var twL = ModelFactory.Spawn("Models/Castle/tower-hexagon-base", 1.0f, p + new Vector3(-2.0f, 0, 0));
-            var twL2 = ModelFactory.Spawn("Models/Castle/tower-hexagon-mid", 1.0f, p + new Vector3(-2.0f, 1.0f, 0));
-            var twL3 = ModelFactory.Spawn("Models/Castle/tower-hexagon-roof", 1.6f, p + new Vector3(-2.0f, 2.0f, 0));
-            var twR = ModelFactory.Spawn("Models/Castle/tower-hexagon-base", 1.0f, p + new Vector3(2.0f, 0, 0));
-            var twR2 = ModelFactory.Spawn("Models/Castle/tower-hexagon-mid", 1.0f, p + new Vector3(2.0f, 1.0f, 0));
-            var twR3 = ModelFactory.Spawn("Models/Castle/tower-hexagon-roof", 1.6f, p + new Vector3(2.0f, 2.0f, 0));
+            var twL = ModelFactory.Spawn("castle.tower_hexagon_base", 1.0f, p + new Vector3(-2.0f, 0, 0));
+            var twL2 = ModelFactory.Spawn("castle.tower_hexagon_mid", 1.0f, p + new Vector3(-2.0f, 1.0f, 0));
+            var twL3 = ModelFactory.Spawn("castle.tower_hexagon_roof", 1.6f, p + new Vector3(-2.0f, 2.0f, 0));
+            var twR = ModelFactory.Spawn("castle.tower_hexagon_base", 1.0f, p + new Vector3(2.0f, 0, 0));
+            var twR2 = ModelFactory.Spawn("castle.tower_hexagon_mid", 1.0f, p + new Vector3(2.0f, 1.0f, 0));
+            var twR3 = ModelFactory.Spawn("castle.tower_hexagon_roof", 1.6f, p + new Vector3(2.0f, 2.0f, 0));
             foreach (var o in new[] { twL, twL2, twL3, twR, twR2, twR3 }) o?.transform.SetParent(root, true);
-            var f1 = ModelFactory.Spawn("Models/Castle/flag", 1.0f, p + new Vector3(-2.0f, 3.7f, 0));
-            var f2 = ModelFactory.Spawn("Models/Castle/flag", 1.0f, p + new Vector3(2.0f, 3.7f, 0));
+            var f1 = ModelFactory.Spawn("castle.flag", 1.0f, p + new Vector3(-2.0f, 3.7f, 0));
+            var f2 = ModelFactory.Spawn("castle.flag", 1.0f, p + new Vector3(2.0f, 3.7f, 0));
             foreach (var o in new[] { f1, f2 }) o?.transform.SetParent(root, true);
             AddSign(root, p + new Vector3(0, 0.05f, 2.2f), AreaId.Challenge, 1f);
             AreaEntrance.Attach(_gm, root.gameObject, AreaId.Challenge);
@@ -138,7 +138,7 @@ namespace EA
 
         void ScatterNature()
         {
-            string[] deco = { "tree_cone", "rock_largeA", "rock_smallA", "plant_bush", "grass_large", "mushroom_red", "mushroom_tan", "plant_bushLarge" };
+            string[] deco = { "nature.tree_cone", "nature.rock_large_a", "nature.rock_small_a", "nature.plant_bush", "nature.grass_large", "nature.mushroom_red", "nature.mushroom_tan", "nature.plant_bush_large" };
             var rnd = new System.Random(20261105);
             for (int i = 0; i < 26; i++)
             {
@@ -146,8 +146,8 @@ namespace EA
                 float r = 16f + (float)rnd.NextDouble() * 4.5f;
                 var pos = new Vector3(Mathf.Cos(ang) * r, 0, Mathf.Sin(ang) * r);
                 var m = deco[rnd.Next(deco.Length)];
-                float h = m.StartsWith("tree") ? 2.4f : (m.StartsWith("rock") ? 0.8f : 0.5f);
-                ModelFactory.Spawn("Models/Nature/" + m, h, pos, (float)rnd.NextDouble() * 360f)
+                float h = m.Contains("tree") ? 2.4f : (m.Contains("rock") ? 0.8f : 0.5f);
+                ModelFactory.Spawn(m, h, pos, (float)rnd.NextDouble() * 360f)
                     ?.transform.SetParent(transform, true);
             }
             // 边缘几棵大树
@@ -155,7 +155,7 @@ namespace EA
             {
                 float ang = i * 45f * Mathf.Deg2Rad + 0.3f;
                 var pos = new Vector3(Mathf.Cos(ang) * 19.5f, 0, Mathf.Sin(ang) * 19.5f);
-                ModelFactory.Spawn("Models/Nature/tree_default", 3.4f, pos, i * 33f)
+                ModelFactory.Spawn("nature.tree_default", 3.4f, pos, i * 33f)
                     ?.transform.SetParent(transform, true);
             }
         }
@@ -186,7 +186,7 @@ namespace EA
             board.transform.SetParent(root, false);
             board.transform.localPosition = new Vector3(0, 1.1f, 0);
             board.transform.localScale = new Vector3(2.4f, 1.2f, 0.12f);
-            board.GetComponent<Renderer>().sharedMaterial = Solid(info.theme);
+            board.GetComponent<Renderer>().sharedMaterial = MaterialLibrary.Solid(info.theme);
 
             // 双面 3D 文字：外侧正向可读；板子是不透明物体，会挡住背面那层
             var outward = root.position; outward.y = 0;
@@ -203,7 +203,7 @@ namespace EA
             pole.transform.SetParent(root, false);
             pole.transform.localPosition = new Vector3(0, 0.35f, 0);
             pole.transform.localScale = new Vector3(0.12f, 0.7f, 0.12f);
-            pole.GetComponent<Renderer>().sharedMaterial = Solid(new Color(0.45f, 0.32f, 0.22f));
+            pole.GetComponent<Renderer>().sharedMaterial = MaterialLibrary.Solid(new Color(0.45f, 0.32f, 0.22f));
         }
 
         GameObject AddSignText(Transform parent, Vector3 worldPos, Quaternion rot, AreaCatalog.Info info)
@@ -240,14 +240,5 @@ namespace EA
             return txt;
         }
 
-        static readonly System.Collections.Generic.Dictionary<Color, Material> _mats = new System.Collections.Generic.Dictionary<Color, Material>();
-        static Material Solid(Color c)
-        {
-            if (_mats.TryGetValue(c, out var m) && m != null) return m;
-            m = new Material(Shader.Find("Standard")) { color = c };
-            m.SetFloat("_Glossiness", 0.12f);
-            _mats[c] = m;
-            return m;
-        }
     }
 }

@@ -18,6 +18,7 @@ namespace EA
             Application.targetFrameRate = 60;
             Screen.sleepTimeout = SleepTimeout.SystemSetting;
 
+            ResourceService.Init();
             Config = AppConfig.Load();
             SaveManager.Load();
 

@@ -75,12 +75,7 @@ namespace EA
             Part("FootR", dark, new Vector3(0.20f, 0.10f, 0.28f), new Vector3(0.16f, 0.12f, 0.24f), PrimitiveType.Sphere);
         }
 
-        static Material Mat(Color c)
-        {
-            var m = new Material(Shader.Find("Standard")) { color = c };
-            m.SetFloat("_Glossiness", 0.15f);
-            return m;
-        }
+        static Material Mat(Color c) => MaterialLibrary.Solid(c);
 
         Transform Part(string name, Material mat, Vector3 localPos, Vector3 scale, PrimitiveType prim, Transform parent = null)
         {
