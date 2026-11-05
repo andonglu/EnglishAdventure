@@ -1,0 +1,40 @@
+{
+  "areas": [
+    {
+      "id": "Vocabulary",
+      "cnTitle": "单词森林",
+      "enTitle": "Vocabulary Forest",
+      "intro": "看图识词 · 听音辨词 · 拼写练习",
+      "foxLine": "Let's learn new words together!",
+      "themeR": 0.35, "themeG": 0.75, "themeB": 0.40,
+      "mapX": -9, "mapZ": -5
+    },
+    {
+      "id": "Phonics",
+      "cnTitle": "音标学院",
+      "enTitle": "Phonics Academy",
+      "intro": "美式音标 · 口型示范 · 自然拼读",
+      "foxLine": "Listen and repeat after me!",
+      "themeR": 0.45, "themeG": 0.55, "themeB": 0.95,
+      "mapX": 9, "mapZ": -5
+    },
+    {
+      "id": "Speaking",
+      "cnTitle": "口语小镇",
+      "enTitle": "Speaking Town",
+      "intro": "情景对话 · 跟读模仿 · 角色扮演",
+      "foxLine": "Can I have some milk? You try!",
+      "themeR": 0.95, "themeG": 0.65, "themeB": 0.30,
+      "mapX": -9, "mapZ": 6
+    },
+    {
+      "id": "Challenge",
+      "cnTitle": "挑战竞技场",
+      "enTitle": "Challenge Arena",
+      "intro": "随机测试 · 错题本 · 间隔复习",
+      "foxLine": "Ready? Show me what you know!",
+      "themeR": 0.85, "themeG": 0.40, "themeB": 0.55,
+      "mapX": 9, "mapZ": 6
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "words": [
+    {
+      "id": "word.apple",
+      "text": "Apple",
+      "ipa": "/ˈæp.əl/",
+      "meaning": "苹果",
+      "image": "media/words/apple.png",
+      "audio": "media/words/apple.ogg",
+      "example": "sent.apple_like"
+    },
+    {
+      "id": "word.cat",
+      "text": "Cat",
+      "ipa": "/kæt/",
+      "meaning": "猫",
+      "image": "media/words/cat.png",
+      "audio": "media/words/cat.ogg",
+      "example": "sent.cat_is_cute"
+    },
+    {
+      "id": "word.dog",
+      "text": "Dog",
+      "ipa": "/dɒɡ/",
+      "meaning": "狗",
+      "image": "media/words/dog.png",
+      "audio": "media/words/dog.ogg",
+      "example": "sent.dog_run"
+    }
+  ]
+}

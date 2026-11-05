@@ -1,0 +1,10 @@
+{
+  "phonics": [
+    { "id": "phon.ae", "symbol": "/æ/", "exampleWord": "apple", "hint": "大嘴扁唇，如 cat" },
+    { "id": "phon.e", "symbol": "/e/", "exampleWord": "egg", "hint": "小嘴扁唇" },
+    { "id": "phon.i_short", "symbol": "/ɪ/", "exampleWord": "ink", "hint": "短促 i" },
+    { "id": "phon.o_short", "symbol": "/ɒ/", "exampleWord": "orange", "hint": "圆唇短 o" },
+    { "id": "phon.u_short", "symbol": "/ʌ/", "exampleWord": "up", "hint": "短促 uh" },
+    { "id": "phon.ee", "symbol": "/iː/", "exampleWord": "tree", "hint": "长音 ee" }
+  ]
+}

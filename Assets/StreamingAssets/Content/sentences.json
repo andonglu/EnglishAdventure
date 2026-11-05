@@ -1,0 +1,10 @@
+{
+  "sentences": [
+    { "id": "sent.apple_like", "speaker": "fox", "text": "I like apples!", "translation": "我喜欢苹果！" },
+    { "id": "sent.cat_is_cute", "speaker": "girl", "text": "The cat is cute.", "translation": "这只猫很可爱。" },
+    { "id": "sent.dog_run", "speaker": "fox", "text": "The dog can run fast.", "translation": "狗跑得很快。" },
+    { "id": "sent.milk_order", "speaker": "fox", "text": "Can I have some milk?", "translation": "能给我来点牛奶吗？" },
+    { "id": "sent.milk_sure", "speaker": "girl", "text": "Sure! Here you are.", "translation": "当然！给你。" },
+    { "id": "sent.milk_thanks", "speaker": "fox", "text": "Thank you!", "translation": "谢谢你！" }
+  ]
+}

@@ -124,94 +124,149 @@ namespace EA
             fox.rectTransform.offsetMin = Vector2.zero; fox.rectTransform.offsetMax = Vector2.zero;
         }
 
-        // ---------------- V0.1 预览内容 ----------------
+        // ---------------- 区域预览（数据来自 StreamingAssets/Content/*.json） ----------------
 
         void PreviewVocabulary()
         {
-            string[] words = { "Apple", "Cat", "Dog" };
-            string[] ipas = { "/ˈæp.əl/", "/kæt/", "/dɒɡ/" };
-            string[] cn = { "苹果", "猫", "狗" };
-            for (int i = 0; i < 3; i++)
+            var lesson = ContentService.FirstLessonOf(AreaId.Vocabulary);
+            int n = 0;
+            if (lesson != null)
             {
-                var card = Card(new Vector2(-330 + i * 330, 60), new Vector2(280, 240),
-                    new Color(1f, 1f, 1f, 0.95f));
-                var w = HomeWorld.Text("W", words[i], 40, FontStyle.Bold, new Color(0.25f, 0.35f, 0.55f));
-                w.rectTransform.SetParent(card, false);
-                w.rectTransform.anchorMin = new Vector2(0.5f, 1f); w.rectTransform.anchorMax = new Vector2(0.5f, 1f);
-                w.rectTransform.pivot = new Vector2(0.5f, 1f);
-                w.rectTransform.anchoredPosition = new Vector2(0, -24);
+                for (int i = 0; i < lesson.wordRefs.Count && n < 3; i++, n++)
+                {
+                    var w = ContentService.FindWord(lesson.wordRefs[i]);
+                    if (w == null) continue;
+                    var card = Card(new Vector2(-330 + n * 330, 60), new Vector2(280, 240),
+                        new Color(1f, 1f, 1f, 0.95f));
 
-                var p = HomeWorld.Text("P", ipas[i], 26, FontStyle.Normal, new Color(0.55f, 0.35f, 0.60f));
-                p.rectTransform.SetParent(card, false);
-                p.rectTransform.anchorMin = new Vector2(0.5f, 0.5f); p.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-                p.rectTransform.anchoredPosition = new Vector2(0, -10);
+                    var img = HomeWorld.Text("Img", "[图片]", 22, FontStyle.Normal, new Color(0.6f, 0.6f, 0.65f));
+                    img.rectTransform.SetParent(card, false);
+                    img.rectTransform.anchorMin = new Vector2(0.5f, 1f); img.rectTransform.anchorMax = new Vector2(0.5f, 1f);
+                    img.rectTransform.pivot = new Vector2(0.5f, 1f);
+                    img.rectTransform.anchoredPosition = new Vector2(0, -14);
+                    if (!string.IsNullOrEmpty(w.image))
+                    {
+                        var sprite = LoadMediaSprite(w.image);
+                        if (sprite != null)
+                        {
+                            var iconGo = new GameObject("Icon", typeof(RectTransform));
+                            iconGo.transform.SetParent(card, false);
+                            var iconRt = iconGo.GetComponent<RectTransform>();
+                            iconRt.anchorMin = iconRt.anchorMax = new Vector2(0.5f, 1f);
+                            iconRt.pivot = new Vector2(0.5f, 1f);
+                            iconRt.anchoredPosition = new Vector2(0, -12);
+                            iconRt.sizeDelta = new Vector2(84, 84);
+                            var icon = iconGo.AddComponent<Image>();
+                            icon.sprite = sprite;
+                            Object.Destroy(img.gameObject);
+                        }
+                    }
 
-                var m = HomeWorld.Text("M", cn[i], 28, FontStyle.Normal, new Color(0.40f, 0.40f, 0.45f));
-                m.rectTransform.SetParent(card, false);
-                m.rectTransform.anchorMin = new Vector2(0.5f, 0f); m.rectTransform.anchorMax = new Vector2(0.5f, 0f);
-                m.rectTransform.pivot = new Vector2(0.5f, 0f);
-                m.rectTransform.anchoredPosition = new Vector2(0, 28);
+                    var wt = HomeWorld.Text("W", w.text, 36, FontStyle.Bold, new Color(0.25f, 0.35f, 0.55f));
+                    wt.rectTransform.SetParent(card, false);
+                    wt.rectTransform.anchorMin = new Vector2(0.5f, 0.5f); wt.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+                    wt.rectTransform.anchoredPosition = new Vector2(0, -20);
+
+                    var p = HomeWorld.Text("P", w.ipa, 24, FontStyle.Normal, new Color(0.55f, 0.35f, 0.60f));
+                    p.rectTransform.SetParent(card, false);
+                    p.rectTransform.anchorMin = new Vector2(0.5f, 0.5f); p.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+                    p.rectTransform.anchoredPosition = new Vector2(0, -56);
+
+                    var m = HomeWorld.Text("M", w.meaning, 26, FontStyle.Normal, new Color(0.40f, 0.40f, 0.45f));
+                    m.rectTransform.SetParent(card, false);
+                    m.rectTransform.anchorMin = new Vector2(0.5f, 0f); m.rectTransform.anchorMax = new Vector2(0.5f, 0f);
+                    m.rectTransform.pivot = new Vector2(0.5f, 0f);
+                    m.rectTransform.anchoredPosition = new Vector2(0, 24);
+                }
             }
-            Caption("第一课将学习：动物、水果、颜色（示例卡片，非最终内容）");
+            Caption(n == 0 ? "课程内容准备中（在 lessons.json / words.json 中添加）"
+                          : $"{lesson.title} · 内容来自 Content/*.json，改 JSON 即可换词");
         }
 
         void PreviewPhonics()
         {
-            string[] symbols = { "/æ/", "/e/", "/ɪ/", "/ɒ/", "/ʌ/", "/iː/" };
-            for (int i = 0; i < symbols.Length; i++)
+            var lesson = ContentService.FirstLessonOf(AreaId.Phonics);
+            int n = 0;
+            if (lesson != null)
             {
-                var col = i % 3; var row = i / 3;
-                var cell = Card(new Vector2(-210 + col * 210, 90 - row * 130), new Vector2(170, 100),
-                    new Color(1f, 1f, 1f, 0.12f));
-                var t = HomeWorld.Text("S", symbols[i], 44, FontStyle.Bold, Color.white);
-                t.rectTransform.SetParent(cell, false);
-                t.rectTransform.anchorMin = Vector2.zero; t.rectTransform.anchorMax = Vector2.one;
-                t.rectTransform.offsetMin = Vector2.zero; t.rectTransform.offsetMax = Vector2.zero;
+                for (int i = 0; i < lesson.phonicsRefs.Count && n < 6; i++, n++)
+                {
+                    var ph = ContentService.FindPhonics(lesson.phonicsRefs[i]);
+                    if (ph == null) continue;
+                    var col = n % 3; var row = n / 3;
+                    var cell = Card(new Vector2(-210 + col * 210, 90 - row * 130), new Vector2(170, 100),
+                        new Color(1f, 1f, 1f, 0.12f));
+                    var t = HomeWorld.Text("S", ph.symbol, 44, FontStyle.Bold, Color.white);
+                    t.rectTransform.SetParent(cell, false);
+                    t.rectTransform.anchorMin = Vector2.zero; t.rectTransform.anchorMax = Vector2.one;
+                    t.rectTransform.offsetMin = Vector2.zero; t.rectTransform.offsetMax = Vector2.zero;
+                }
             }
-            Caption("美式音标分组教学：单元音 → 双元音 → 辅音（口型动画与跟读在 V0.3 加入）");
+            Caption(n == 0 ? "音标课程准备中（在 phonics.json 中添加）" : lesson.title);
         }
 
         void PreviewSpeaking()
         {
-            string[] lines =
+            var lesson = ContentService.FirstLessonOf(AreaId.Speaking);
+            int n = 0;
+            if (lesson != null)
             {
-                "🦊  Can I have some milk?",
-                "👧  Sure! Here you are.",
-                "🦊  Thank you!",
-            };
-            for (int i = 0; i < lines.Length; i++)
-            {
-                var bubble = Card(new Vector2(0, 150 - i * 95), new Vector2(640, 76),
-                    i % 2 == 0 ? new Color(0.95f, 0.65f, 0.30f) : new Color(1f, 1f, 1f, 0.92f));
-                var t = HomeWorld.Text("L", lines[i], 26, FontStyle.Normal,
-                    i % 2 == 0 ? Color.white : new Color(0.30f, 0.30f, 0.35f));
-                t.rectTransform.SetParent(bubble, false);
-                t.rectTransform.anchorMin = Vector2.zero; t.rectTransform.anchorMax = Vector2.one;
-                t.rectTransform.offsetMin = new Vector2(24, 0); t.rectTransform.offsetMax = Vector2.zero;
-                t.alignment = TextAnchor.MiddleLeft;
+                for (int i = 0; i < lesson.sentenceRefs.Count && n < 3; i++, n++)
+                {
+                    var s = ContentService.FindSentence(lesson.sentenceRefs[i]);
+                    if (s == null) continue;
+                    string emoji = s.speaker == "fox" ? "🦊" : (s.speaker == "girl" ? "👧" : "🙂");
+                    var bubble = Card(new Vector2(0, 150 - n * 95), new Vector2(640, 76),
+                        n % 2 == 0 ? new Color(0.95f, 0.65f, 0.30f) : new Color(1f, 1f, 1f, 0.92f));
+                    var t = HomeWorld.Text("L", $"{emoji}  {s.text}", 26, FontStyle.Normal,
+                        n % 2 == 0 ? Color.white : new Color(0.30f, 0.30f, 0.35f));
+                    t.rectTransform.SetParent(bubble, false);
+                    t.rectTransform.anchorMin = Vector2.zero; t.rectTransform.anchorMax = Vector2.one;
+                    t.rectTransform.offsetMin = new Vector2(24, 0); t.rectTransform.offsetMax = Vector2.zero;
+                    t.alignment = TextAnchor.MiddleLeft;
+                }
             }
-            Caption("情景对话练习：餐厅点餐场景示例（录音跟读将在 V0.4 加入）");
+            Caption(n == 0 ? "对话课程准备中（在 sentences.json 中添加）" : lesson.title);
         }
 
         void PreviewChallenge()
         {
-            string[] types = { "看图选词", "听音选词", "单词拼写", "音标辨认", "单词跟读", "句子表达" };
-            for (int i = 0; i < types.Length; i++)
+            var quizzes = ContentService.Db.quizzes;
+            int n = 0;
+            for (int i = 0; i < quizzes.Count && n < 6; i++, n++)
             {
-                var col = i % 3; var row = i / 3;
+                var col = n % 3; var row = n / 3;
                 var cell = Card(new Vector2(-210 + col * 210, 90 - row * 130), new Vector2(170, 100),
                     new Color(1f, 1f, 1f, 0.12f));
-                var num = HomeWorld.Text("N", (i + 1).ToString(), 30, FontStyle.Bold,
+                var num = HomeWorld.Text("N", (n + 1).ToString(), 30, FontStyle.Bold,
                     new Color(0.98f, 0.75f, 0.15f));
                 num.rectTransform.SetParent(cell, false);
                 num.rectTransform.anchorMin = new Vector2(0.5f, 0.5f); num.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
                 num.rectTransform.anchoredPosition = new Vector2(0, 16);
-                var t = HomeWorld.Text("T", types[i], 24, FontStyle.Normal, Color.white);
+                var t = HomeWorld.Text("T", quizzes[i].title, 24, FontStyle.Normal, Color.white);
                 t.rectTransform.SetParent(cell, false);
                 t.rectTransform.anchorMin = new Vector2(0.5f, 0.5f); t.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
                 t.rectTransform.anchoredPosition = new Vector2(0, -22);
             }
-            Caption("六种题型随机测验 · 错题本与间隔复习在 V0.6 加入");
+            Caption(n == 0 ? "测验准备中（在 quizzes.json 中添加）" : "共 " + quizzes.Count + " 组测验 · 题目来自 quizzes.json");
+        }
+
+        /// <summary>从 StreamingAssets 加载图片为 Sprite（教学内容媒体）。</summary>
+        static Sprite LoadMediaSprite(string relPath)
+        {
+            try
+            {
+                string full = System.IO.Path.Combine(Application.streamingAssetsPath, relPath);
+                if (!System.IO.File.Exists(full)) return null;
+                var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                tex.LoadImage(System.IO.File.ReadAllBytes(full));
+                return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"[EA] 内容图片加载失败 {relPath}: {e.Message}");
+                return null;
+            }
         }
 
         // ---------------- 工具 ----------------

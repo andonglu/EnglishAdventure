@@ -1,0 +1,21 @@
+{
+  "quizzes": [
+    {
+      "id": "quiz.vocab.first",
+      "title": "看图选词",
+      "lessonRef": "lesson.vocab.first",
+      "questions": [
+        {
+          "prompt": "哪个单词是「苹果」？",
+          "choices": ["Apple", "Cat", "Dog"],
+          "answerIndex": 0
+        },
+        {
+          "prompt": "哪个单词是「猫」？",
+          "choices": ["Dog", "Cat", "Apple"],
+          "answerIndex": 1
+        }
+      ]
+    }
+  ]
+}

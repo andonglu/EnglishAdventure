@@ -1,0 +1,36 @@
+{
+  "lessons": [
+    {
+      "id": "lesson.vocab.first",
+      "areaId": "Vocabulary",
+      "title": "第一课：动物与水果",
+      "wordRefs": ["word.apple", "word.cat", "word.dog"],
+      "phonicsRefs": [],
+      "sentenceRefs": []
+    },
+    {
+      "id": "lesson.phonics.vowels1",
+      "areaId": "Phonics",
+      "title": "单元音（一）",
+      "wordRefs": [],
+      "phonicsRefs": ["phon.ae", "phon.e", "phon.i_short", "phon.o_short", "phon.u_short", "phon.ee"],
+      "sentenceRefs": []
+    },
+    {
+      "id": "lesson.speaking.milk",
+      "areaId": "Speaking",
+      "title": "餐厅点餐：要一杯牛奶",
+      "wordRefs": [],
+      "phonicsRefs": [],
+      "sentenceRefs": ["sent.milk_order", "sent.milk_sure", "sent.milk_thanks"]
+    },
+    {
+      "id": "lesson.challenge.first",
+      "areaId": "Challenge",
+      "title": "综合小测（示例）",
+      "wordRefs": ["word.apple", "word.cat", "word.dog"],
+      "phonicsRefs": [],
+      "sentenceRefs": []
+    }
+  ]
+}

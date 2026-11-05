@@ -19,6 +19,8 @@ namespace EA
             Screen.sleepTimeout = SleepTimeout.SystemSetting;
 
             ResourceService.Init();
+            ContentService.Init();
+            AreaCatalog.Init();
             Config = AppConfig.Load();
             SaveManager.Load();
 
