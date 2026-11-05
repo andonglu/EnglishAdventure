@@ -23,6 +23,14 @@ crashlytics-build.properties
 NVIDIA Corporation/
 build/
 
+# ===== 本机离线包（UPM 故障机的本地兜底；标准环境由 manifest 走 registry 解析）=====
+Packages/com.unity.burst/
+Packages/com.unity.searcher/
+Packages/com.unity.render-pipelines.universal/
+Packages/com.unity.render-pipelines.universal-config/
+Packages/com.unity.render-pipelines.core/
+Packages/com.unity.shadergraph/
+
 # ===== 系统垃圾 =====
 .DS_Store
 Thumbs.db

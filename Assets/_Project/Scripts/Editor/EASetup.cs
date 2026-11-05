@@ -21,9 +21,9 @@ namespace EA.EditorTools
             PlayerSettings.productName = "English Adventure";
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android, ScriptingImplementation.IL2CPP);
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.lry.englishadventure");
-            PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel24;
+            PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel26;
             PlayerSettings.Android.targetSdkVersion = AndroidSdkVersions.AndroidApiLevel34;
-            PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64 | AndroidArchitecture.X86_64;
+            PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
             PlayerSettings.SetManagedStrippingLevel(NamedBuildTarget.Android, ManagedStrippingLevel.Minimal);
 
             // 横屏
