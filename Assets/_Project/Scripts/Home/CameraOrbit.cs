@@ -2,14 +2,15 @@ using UnityEngine;
 
 namespace EA
 {
-    /// <summary>环绕相机：拖动旋转、双指/滚轮缩放、空闲时缓慢自动环绕。</summary>
+    /// <summary>环绕相机：拖拽旋转、捏合/滚轮缩放、空闲时缓慢自动环绕。
+    /// 输入全部来自 InputRouter 事件，不直接读取 Input。</summary>
     public class CameraOrbit : MonoBehaviour
     {
         AppConfig _cfg;
         float _yaw;
         float _dist;
         float _idleTimer;
-        Camera _cam;
+        InputRouter _input;
 
         public static CameraOrbit Create(AppConfig cfg, Vector3 focus)
         {
@@ -28,53 +29,60 @@ namespace EA
         void Init(AppConfig cfg, Vector3 focus)
         {
             _cfg = cfg;
-            _cam = GetComponent<Camera>();
             _dist = cfg.cameraDistance;
             _yaw = 0f;
             transform.position = focus;
+
+            _input = InputRouter.I;
+            if (_input != null)
+            {
+                _input.OnDragDelta += HandleDrag;
+                _input.OnPinchDelta += HandlePinch;
+                _input.OnScroll += HandleScroll;
+            }
+            else
+            {
+                Debug.LogWarning("[EA] InputRouter 缺失，相机将无法响应输入");
+            }
+
             Apply(focus);
+        }
+
+        void OnDestroy()
+        {
+            if (_input != null)
+            {
+                _input.OnDragDelta -= HandleDrag;
+                _input.OnPinchDelta -= HandlePinch;
+                _input.OnScroll -= HandleScroll;
+            }
+        }
+
+        void HandleDrag(Vector2 delta)
+        {
+            _yaw += delta.x * _cfg.dragOrbitSpeed;
+            _idleTimer = 0f;
+        }
+
+        void HandlePinch(float pinchDelta)
+        {
+            _dist = Mathf.Clamp(_dist + pinchDelta * _cfg.zoomSpeed * _dist,
+                                _cfg.cameraMinDistance, _cfg.cameraMaxDistance);
+            _idleTimer = 0f;
+        }
+
+        void HandleScroll(float scroll)
+        {
+            _dist = Mathf.Clamp(_dist + scroll * 1.2f,
+                                _cfg.cameraMinDistance, _cfg.cameraMaxDistance);
+            _idleTimer = 0f;
         }
 
         void Update()
         {
-            var focus = Vector3.zero;
-            float yawDelta = 0f;
-            float zoomDelta = 0f;
-
-            // 触摸
-            if (Input.touchCount == 1)
-            {
-                var t = Input.GetTouch(0);
-                if (t.phase == TouchPhase.Moved)
-                {
-                    yawDelta = -t.deltaPosition.x * _cfg.dragOrbitSpeed;
-                    _idleTimer = 0f;
-                }
-            }
-            else if (Input.touchCount == 2)
-            {
-                var a = Input.GetTouch(0);
-                var b = Input.GetTouch(1);
-                float prev = (a.position - a.deltaPosition - (b.position - b.deltaPosition)).magnitude;
-                float now = (a.position - b.position).magnitude;
-                zoomDelta = (prev - now) * _cfg.zoomSpeed * _dist;
-                _idleTimer = 0f;
-            }
-            // 鼠标（编辑器/Windows）
-            else if (Input.GetMouseButton(0) && Input.mousePresent)
-            {
-                yawDelta = -Input.GetAxis("Mouse X") * _cfg.dragOrbitSpeed * 18f;
-                _idleTimer = 0f;
-            }
-            zoomDelta += -Input.mouseScrollDelta.y * 1.2f;
-
-            _yaw += yawDelta;
-            _dist = Mathf.Clamp(_dist + zoomDelta, _cfg.cameraMinDistance, _cfg.cameraMaxDistance);
-
             _idleTimer += Time.deltaTime;
             if (_idleTimer > 4f) _yaw += _cfg.orbitSpeed * Time.deltaTime;
-
-            Apply(focus);
+            Apply(Vector3.zero);
         }
 
         void Apply(Vector3 focus)

@@ -33,6 +33,9 @@ namespace EA
                 es.AddComponent<StandaloneInputModule>();
             }
 
+            // 统一输入（须先于相机创建）
+            gameObject.AddComponent<InputRouter>();
+
             // 世界
             var world = HomeWorld.Build(this, transform);
             CameraOrbit.Create(Config, Vector3.zero);
@@ -51,6 +54,20 @@ namespace EA
 
             SaveManager.OnChanged += () => Hud.Refresh();
             Hud.Refresh();
+
+            // 返回键：优先关学习页，否则弹退出确认
+            InputRouter.I.OnBack += HandleBack;
+        }
+
+        void OnDestroy()
+        {
+            if (InputRouter.I != null) InputRouter.I.OnBack -= HandleBack;
+        }
+
+        void HandleBack()
+        {
+            if (_page != null && _page.IsOpen) { CloseArea(); return; }
+            if (_quit != null) _quit.Toggle();
         }
 
         public void OpenArea(AreaId id)
@@ -65,15 +82,6 @@ namespace EA
         {
             Audio.Back();
             _page.Hide();
-        }
-
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                if (_page != null && _page.IsOpen) { CloseArea(); return; }
-                if (_quit != null) _quit.Toggle();
-            }
         }
 
         /// <summary>狐狸被点（狐狸自己身上没有碰撞体，这里由 GameManager 做空检）。</summary>
