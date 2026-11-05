@@ -4,25 +4,19 @@ using UnityEngine.UI;
 namespace EA
 {
     /// <summary>主菜单返回键的退出二次确认。</summary>
-    public class QuitConfirm : MonoBehaviour
+    public class QuitConfirm : MonoBehaviour, IPage
     {
         GameManager _gm;
 
+        public bool IsOpen => gameObject.activeSelf;
+
         public static QuitConfirm Create(GameManager gm)
         {
-            var go = new GameObject("QuitConfirm", typeof(RectTransform));
-            go.transform.SetParent(gm.transform, false);
-            var canvas = go.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 20;
-            var scaler = go.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1280, 800);
-            go.AddComponent<GraphicRaycaster>();
-            var q = go.AddComponent<QuitConfirm>();
+            var root = UiFactory.CreateCanvas("QuitConfirm", gm.transform, sortOrder: 20);
+            var q = root.gameObject.AddComponent<QuitConfirm>();
             q._gm = gm;
-            q.Build(go.GetComponent<RectTransform>());
-            go.SetActive(false);
+            q.Build(root);
+            root.gameObject.SetActive(false);
             return q;
         }
 
@@ -56,8 +50,10 @@ namespace EA
 
         public void Toggle()
         {
-            if (gameObject.activeSelf) { gameObject.SetActive(false); _gm.Audio.Back(); }
-            else { gameObject.SetActive(true); _gm.Audio.Question(); }
+            if (gameObject.activeSelf) { NavigationService.Remove(this); gameObject.SetActive(false); _gm.Audio.Back(); }
+            else { NavigationService.Push(this); gameObject.SetActive(true); _gm.Audio.Question(); }
         }
+
+        public void ClosePage() => Toggle();   // IPage：导航栈要求关闭（返回键）
     }
 }

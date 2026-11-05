@@ -69,7 +69,8 @@ namespace EA
 
         void HandleBack()
         {
-            if (_page != null && _page.IsOpen) { CloseArea(); return; }
+            // 先关栈顶页面（学习页/退出确认），栈空时弹退出确认
+            if (NavigationService.PopTop()) return;
             if (_quit != null) _quit.Toggle();
         }
 

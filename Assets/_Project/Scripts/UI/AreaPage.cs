@@ -7,7 +7,7 @@ namespace EA
     /// 区域页（V0.1 占位）：主题头 + 狐狸台词 + 该区域的「内容预览」+ 返回按钮。
     /// V0.2 起各区域页替换为真正的学习流程，页面骨架保持不变。
     /// </summary>
-    public class AreaPage : MonoBehaviour
+    public class AreaPage : MonoBehaviour, IPage
     {
         public bool IsOpen { get; private set; }
         GameManager _gm;
@@ -17,19 +17,11 @@ namespace EA
 
         public static AreaPage Create(GameManager gm)
         {
-            var go = new GameObject("AreaPage", typeof(RectTransform));
-            go.transform.SetParent(gm.transform, false);
-            var canvas = go.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 10;
-            var scaler = go.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1280, 800);
-            go.AddComponent<GraphicRaycaster>();
-            var page = go.AddComponent<AreaPage>();
+            var root = UiFactory.CreateCanvas("AreaPage", gm.transform, sortOrder: 10);
+            var page = root.gameObject.AddComponent<AreaPage>();
             page._gm = gm;
-            page.Build(go.GetComponent<RectTransform>());
-            go.SetActive(false);
+            page.Build(root);
+            root.gameObject.SetActive(false);
             return page;
         }
 
@@ -98,13 +90,17 @@ namespace EA
 
             gameObject.SetActive(true);
             IsOpen = true;
+            NavigationService.Push(this);
         }
 
         public void Hide()
         {
+            NavigationService.Remove(this);
             gameObject.SetActive(false);
             IsOpen = false;
         }
+
+        public void ClosePage() => Hide();   // IPage：导航栈要求关闭（返回键）
 
         void SpeechBubble(string line)
         {

@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace EA
 {
-    /// <summary>区域入口：点击 → 打开区域页；首次访问奖励星星；按下有回弹。</summary>
+    /// <summary>区域入口：点击 → 打开区域页；按下有回弹。进区只记访问统计，不发星星。</summary>
     public class AreaEntrance : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         public AreaId area;
@@ -19,8 +19,18 @@ namespace EA
 
             // 始终加一个覆盖整个区域的大盒子；不能依赖子物体碰撞体
             // （标牌用 Destroy 移除的碰撞体当帧仍能被查到，会导致这里误判跳过）
+            //
+            // 高度限 2.5m：区域建筑群（树木/塔楼）整体包围盒可达 4m+，
+            // 过高的盒子会悬空拦住后方区域的点击射线。
             {
                 var bounds = visual.GetComponentsInChildren<Renderer>().Length > 0 ? CalcBounds(visual) : new Bounds(visual.transform.position, Vector3.one * 6f);
+                const float maxHeight = 2.5f;
+                if (bounds.size.y > maxHeight)
+                {
+                    float bottom = bounds.center.y - bounds.size.y * 0.5f;
+                    bounds.size = new Vector3(bounds.size.x, maxHeight, bounds.size.z);
+                    bounds.center = new Vector3(bounds.center.x, bottom + maxHeight * 0.5f, bounds.center.z);
+                }
                 var box = visual.AddComponent<BoxCollider>();
                 box.center = visual.transform.InverseTransformPoint(bounds.center);
                 box.size = visual.transform.InverseTransformDirection(bounds.size);
