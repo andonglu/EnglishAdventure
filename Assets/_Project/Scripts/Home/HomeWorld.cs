@@ -46,14 +46,31 @@ namespace EA
             ScatterNature();
 
             // ---- 狐狸伙伴站在广场中央 ----
-            var fox = FoxCompanion.Spawn(new Vector3(0, 0.5f, 0), _gm.Audio);
+            var fox = FoxCompanion.Spawn(new Vector3(0, 0.5f, 0), _gm != null ? _gm.Audio : null);
             fox.transform.SetParent(transform, true);
         }
 
         // ---------------- 区域建筑 ----------------
 
+        /// <summary>
+        /// 尝试从烘焙 Prefab 实例化区域；缺失时返回 false，调用方回退到代码动态生成。
+        /// Prefab 内含模型、标牌、AreaEntrance（含点击盒），位置以 AreaCatalog 为准重新归位。
+        /// </summary>
+        bool TryInstantiateArea(AreaId id)
+        {
+            if (FoxCompanion.IsBaking) return false;   // 烘焙时必须纯代码生成
+            var prefab = Resources.Load<GameObject>("Prefabs/Area_" + id);
+            if (prefab == null) return false;
+            var inst = Object.Instantiate(prefab, transform);
+            var rt = inst.transform;
+            rt.position = Pos(id);
+            AreaEntrance.EnsureClickBox(inst);   // 兼容旧 Prefab（点击盒是烘焙后加的也不冲突）
+            return true;
+        }
+
         void BuildVocabularyForest()
         {
+            if (TryInstantiateArea(AreaId.Vocabulary)) return;
             var p = Pos(AreaId.Vocabulary);
             var root = Group("Area_Vocabulary", p);
             // 森林：一圈树 + 原木拱门入口
@@ -78,6 +95,7 @@ namespace EA
 
         void BuildPhonicsAcademy()
         {
+            if (TryInstantiateArea(AreaId.Phonics)) return;
             var p = Pos(AreaId.Phonics);
             var root = Group("Area_Phonics", p);
             // 学院：城堡塔楼（基座+双中段+尖顶）
@@ -100,6 +118,7 @@ namespace EA
 
         void BuildSpeakingTown()
         {
+            if (TryInstantiateArea(AreaId.Speaking)) return;
             var p = Pos(AreaId.Speaking);
             var root = Group("Area_Speaking", p);
             var h1 = ModelFactory.Spawn("town.building_a", 2.6f, p + new Vector3(-1.8f, 0, -1.2f), 15f);
@@ -115,6 +134,7 @@ namespace EA
 
         void BuildChallengeArena()
         {
+            if (TryInstantiateArea(AreaId.Challenge)) return;
             var p = Pos(AreaId.Challenge);
             var root = Group("Area_Challenge", p);
             // 竞技场：门楼 + 两侧塔 + 旗帜 + 石阶广场

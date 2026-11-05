@@ -17,12 +17,15 @@ namespace EA
         float _wagPhase;
         AudioManager _audio;
 
-        public static FoxCompanion Spawn(Vector3 pos, AudioManager audio)
+        /// <summary>烘焙开关：EABake.BakePrefabs 期间为 true，强制走纯代码生成，避免基于旧 Prefab 重烘。</summary>
+        public static bool IsBaking;
+
+        /// <summary>纯代码生成狐狸（烘焙 Prefab 与运行时回退共用，绝不加载旧 Prefab）。</summary>
+        public static FoxCompanion BuildProcedural(Vector3 pos)
         {
             var root = new GameObject("FoxCompanion").transform;
             root.position = pos;
             var fox = root.gameObject.AddComponent<FoxCompanion>();
-            fox._audio = audio;
             fox.Build();
             var col = root.gameObject.AddComponent<SphereCollider>();
             col.center = new Vector3(0, 0.7f, 0);
@@ -31,8 +34,48 @@ namespace EA
             return fox;
         }
 
+        public static FoxCompanion Spawn(Vector3 pos, AudioManager audio)
+        {
+            // 优先使用烘焙好的 Prefab（P8）；缺失时回退代码动态生成
+            var prefab = IsBaking ? null : Resources.Load<GameObject>("Prefabs/Fox");
+            FoxCompanion fox;
+            if (prefab != null)
+            {
+                var inst = Object.Instantiate(prefab);
+                inst.transform.position = pos;
+                fox = inst.GetComponent<FoxCompanion>();
+                fox.ResolveParts();   // Prefab 实例的部件引用靠名字重新解析
+            }
+            else
+            {
+                fox = BuildProcedural(pos);
+            }
+            fox._audio = audio;
+            return fox;
+        }
+
+        void Awake() => ResolveParts();
+
+        /// <summary>按名字解析身体部件（Prefab 实例反序列化后字段引用为空，须重新绑定）。</summary>
+        void ResolveParts()
+        {
+            if (_body != null) return;
+            _body = transform.Find("Body");
+            _head = transform.Find("Head");
+            if (_head != null)
+            {
+                _earL = _head.Find("EarL");
+                _earR = _head.Find("EarR");
+                _eyeL = _head.Find("EyeL");
+                _eyeR = _head.Find("EyeR");
+                _lidL = _head.Find("LidL");
+                _lidR = _head.Find("LidR");
+            }
+            _tail = transform.Find("Tail");
+        }
+
         /// <summary>点击狐狸 → 开心跳。</summary>
-        class FoxTap : MonoBehaviour, UnityEngine.EventSystems.IPointerDownHandler
+        public class FoxTap : MonoBehaviour, UnityEngine.EventSystems.IPointerDownHandler
         {
             public void OnPointerDown(UnityEngine.EventSystems.PointerEventData e)
                 => GetComponent<FoxCompanion>().HappyHop();
