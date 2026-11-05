@@ -212,8 +212,8 @@ namespace EA
             go.transform.SetParent(parent, true);
             go.transform.SetPositionAndRotation(worldPos, rot);
             var tm = go.AddComponent<TextMesh>();
-            tm.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            tm.text = info.enTitle + "\n" + info.cnTitle;
+            tm.font = EaText.Font;   // 打包 CJK 字体：标牌含中文（如「单词森林」）
+            tm.text = EaText.Sanitize(info.enTitle + "\n" + info.cnTitle);
             tm.fontSize = 48;
             tm.characterSize = 0.03f;
             tm.lineSpacing = 0.85f;
@@ -227,17 +227,8 @@ namespace EA
 
         public static UnityEngine.UI.Text Text(string name, string content, int size, FontStyle style, Color color)
         {
-            var go = new GameObject(name, typeof(RectTransform));
-            var txt = go.AddComponent<UnityEngine.UI.Text>();
-            txt.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            txt.text = content;
-            txt.fontSize = size;
-            txt.fontStyle = style;
-            txt.color = color;
-            txt.alignment = TextAnchor.MiddleCenter;
-            txt.horizontalOverflow = HorizontalWrapMode.Overflow;
-            txt.verticalOverflow = VerticalWrapMode.Overflow;
-            return txt;
+            // 统一走 EaText：CJK 打包字体 + emoji 回退映射
+            return EaText.Create(name, content, size, style, color);
         }
 
     }
