@@ -75,9 +75,9 @@ namespace EA
 
         public void OpenArea(AreaId id)
         {
-            bool isNew = SaveManager.MarkVisited(id.ToString(), Config.starPerNewArea);
+            // 进区只作访问统计，星星改由学习行为（课程/测验/口语）发放
+            SaveManager.MarkVisited(id.ToString());
             Audio.Select();
-            if (isNew) Audio.Confirm();
             _page.Show(id);
         }
 

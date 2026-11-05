@@ -19,7 +19,6 @@ namespace EA
 
         [Header("交互")]
         public float entranceBounce = 0.12f;
-        public int starPerNewArea = 1;          // 首次进入区域奖励星星
 
         [Header("音频")]
         [Range(0f, 1f)] public float uiVolume = 0.9f;
