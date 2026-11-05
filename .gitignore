@@ -1,0 +1,29 @@
+# ===== Unity 标准忽略 =====
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]serSettings/
+MemoryCaptures/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+.vs/
+.idea/
+crashlytics-build.properties
+
+# ===== 本机环境产物 =====
+.utmp/
+NVIDIA Corporation/
+build/
+
+# ===== 系统垃圾 =====
+.DS_Store
+Thumbs.db
+desktop.ini

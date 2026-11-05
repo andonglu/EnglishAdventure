@@ -1,0 +1,66 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+
+namespace EA
+{
+    /// <summary>区域入口：点击 → 打开区域页；首次访问奖励星星；按下有回弹。</summary>
+    public class AreaEntrance : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    {
+        public AreaId area;
+        Vector3 _baseScale;
+        GameManager _gm;
+
+        public static AreaEntrance Attach(GameManager gm, GameObject visual, AreaId area)
+        {
+            var a = visual.AddComponent<AreaEntrance>();
+            a.area = area;
+            a._gm = gm;
+            a._baseScale = visual.transform.localScale;
+
+            // 始终加一个覆盖整个区域的大盒子；不能依赖子物体碰撞体
+            // （标牌用 Destroy 移除的碰撞体当帧仍能被查到，会导致这里误判跳过）
+            {
+                var bounds = visual.GetComponentsInChildren<Renderer>().Length > 0 ? CalcBounds(visual) : new Bounds(visual.transform.position, Vector3.one * 6f);
+                var box = visual.AddComponent<BoxCollider>();
+                box.center = visual.transform.InverseTransformPoint(bounds.center);
+                box.size = visual.transform.InverseTransformDirection(bounds.size);
+            }
+            return a;
+        }
+
+        static Bounds CalcBounds(GameObject go)
+        {
+            var rends = go.GetComponentsInChildren<Renderer>();
+            Bounds b = rends.Length > 0 ? rends[0].bounds : new Bounds(go.transform.position, Vector3.one);
+            foreach (var r in rends) b.Encapsulate(r.bounds);
+            return b;
+        }
+
+        public void OnPointerDown(PointerEventData e)
+        {
+            StopAllCoroutines();
+            StartCoroutine(Bounce(_baseScale * (1f - _gm.Config.entranceBounce)));
+            _gm.Audio.Click();
+        }
+
+        public void OnPointerUp(PointerEventData e)
+        {
+            StopAllCoroutines();
+            StartCoroutine(Bounce(_baseScale));
+            _gm.OpenArea(area);
+        }
+
+        System.Collections.IEnumerator Bounce(Vector3 target)
+        {
+            var tr = transform;
+            Vector3 from = tr.localScale;
+            float t = 0f;
+            while (t < 1f)
+            {
+                t += Time.deltaTime * 9f;
+                tr.localScale = Vector3.Lerp(from, target, Mathf.Clamp01(t));
+                yield return null;
+            }
+        }
+    }
+}
